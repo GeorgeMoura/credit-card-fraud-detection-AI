@@ -1,5 +1,6 @@
 Author: George Nunes de Moura Filho - Computer Engineering student
 Brazil - Federal University of Paraiba - 2017
+e-mail: georgenmoura@gmail.com
 
 These 4 scripts contains the whole classification pipeline in order to build a binary classifier to detect fraud attempts on credit card shopping (Using python and scikit learn lib) on a specific database.
 
