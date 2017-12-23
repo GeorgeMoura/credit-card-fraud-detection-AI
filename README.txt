@@ -1,4 +1,6 @@
-Author: George Nunes de Moura Filho - Computer Engineering student
+Authors: George Nunes de Moura Filho
+         Gabriel Goncalves Barreto dos Santos - Github: github.com/gabrielgoncalves95
+
 Brazil - Federal University of Paraiba - 2017
 e-mail: georgenmoura@gmail.com
 
