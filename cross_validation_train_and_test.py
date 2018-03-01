@@ -110,16 +110,13 @@ connection = pyodbc.connect('DRIVER={ODBC Driver 13 for SQL Server};SERVER=255.2
 #Montagem da query, selecionar emissor e quantos dias à serem ignorados a partir de hoje.
 emissor = "73"
 date = "-1"
-query = "SELECT co.DataCompra, co.Valor, co.ValorDestino, co.ValorOrigem, co.Pais, co.Origem, co.CodigoRespostaFraude, co.MCC, co.CodigoMoedaOrigem, co.CodigoMoedaDestino, co.ModoEntradaTerminal, co.Id_Estado, co.ID_Produto, co.DataSaidaCompra, co.FraudScore, tr.Descricao, ct.UF, ct.LimiteGlobal, ct.LimiteGlobalCliente, ct.LimiteSaqueNacGlobal, ct.QtdComprasDiaAprovadas, ct.QtdCompras3DiasAprovadas, ct.QtdCompras7DiasAprovadas, ct.QtdComprasTotalAprovadas, ct.QtdComprasDiaNegadas, ct.QtdCompras3DiasNegadas, ct.QtdCompras7DiasNegadas, ct.QtdComprasTotalNegadas, ct.ValorComprasDiaAprovadas, ct.ValorCompras3DiasAprovadas, ct.ValorCompras7DiasAprovadas, ct.ValorComprasDiaNegadas, ct.ValorCompras3DiasNegadas, ct.ValorCompras7DiasNegadas, ct.ValorUltCompra, ct.DataUltCompra, ct.CodigoRespostaAutorizadorUltCompra, ct.PaisUltCompra, ct.Id_EstadoUlt, ct.UltFraudScore, ct.DataUltCompraAlertada,ct.DataDesbloqueio, QtdEventos,  (GETDATE() - ct.DataCriacao) AS TempoCartao, CASE WHEN tr.CodigoTipoResolucao = 1 then  'Fraude' ELSE 'Nao Fraude' end as Resolucao FROM fraude..compras co INNER JOIN FraudeAtend..filaEventos fl ON co.id_compra = fl.Id_Compra INNER JOIN FraudeAtend..TiposResolucao tr ON tr.Id_TipoResolucao = fl.Id_TipoResolucao INNER JOIN Fraude..Cartoes ct ON co.Id_Cartao = ct.Id_Cartao INNER JOIN (SELECT CO.ID_COMPRA as COMPRA, COUNT(*) AS QtdEventos FROM fraude..compras co INNER JOIN FraudeAtend..filaEventos fl ON co.id_compra = fl.Id_Compra INNER JOIN FraudeAtend..TiposResolucao tr ON tr.Id_TipoResolucao = fl.Id_TipoResolucao INNER JOIN Fraude..Cartoes ct ON co.Id_Cartao = ct.Id_Cartao WHERE co.id_emissor = "+ emissor +" GROUP BY co.id_compra ) AS QtdEventos on QtdEventos.COMPRA = co.Id_Compra WHERE ct.Id_Emissor = "+ emissor +" and co.id_emissor = "+ emissor +" and datacompra < dateadd(day,"+ date +",getdate()) and fl.Id_EventoCompra = (SELECT MAX(fev.Id_EventoCompra) FROM FraudeAtend..filaEventos fev WHERE fev.Id_Compra = co.Id_Compra)"
+query = "SELECT..."
 
 print("Carregando Dataframe...")
 dataset_train = pd.read_sql(query,connection)
 
 #Exclusão das colunas de correlação negativa, após visualização da matriz de correlação
-dataset_train = dataset_train.drop(["QtdComprasDiaAprovadas", "QtdCompras3DiasAprovadas", 
-									"QtdCompras7DiasAprovadas", "QtdComprasTotalAprovadas",
-								    "ValorComprasDiaAprovadas", "ValorCompras3DiasAprovadas", 
-								    "ValorCompras7DiasAprovadas"], axis = 1)
+dataset_train = dataset_train.drop(["..."], axis = 1)
 
 #corrigindo dados com NULL
 print("Corrigindo colunas com dados nulos...")
@@ -129,8 +126,8 @@ dataset_train = data_correction(dataset_train)
 
 '''Balanceamento, serve para manter a base equilibrada em termos de número de fraudes e não-fraudes,
    muitas vezes necessário caso o número de não-fraudes seja extremamente superior ao número de fraudes,
-   ou caso o seu dataframe seja muito grande (Pernambucanas, por exemplo). Em termos gerais, fica a critério de análise,
-	Nos testes que fizemos, balanceamos o emissor 73(Pernambucanas), e para o emissor 88(BMG) os testes com e sem
+   ou caso o seu dataframe seja muito grande. Em termos gerais, fica a critério de análise,
+	Nos testes que fizemos, balanceamos o emissor x, e para o emissor y os testes com e sem
 	balanceamento resultaram de maneira bastante semelhante.
 '''
 df0 = dataset_train[dataset_train['Resolucao'] == 'Fraude']
